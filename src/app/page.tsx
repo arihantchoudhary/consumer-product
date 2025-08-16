@@ -1,30 +1,32 @@
 "use client";
 
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useUser } from "@stackframe/stack";
-import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function RootPage() {
-  const user = useUser();
   const router = useRouter();
 
-  useEffect(() => {
-    if (user) {
-      // User is authenticated, redirect to choose page
-      router.push("/choose");
-    } else {
-      // User is not authenticated, redirect to sign-in
-      router.push("/sign-in");
-    }
-  }, [user, router]);
+  const handleSignIn = () => {
+    router.push("/sign-in");
+  };
 
-  // Show loading state while checking authentication
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black">
-      <div className="text-center">
-        <Loader2 className="h-8 w-8 animate-spin text-white mx-auto mb-4" />
-        <p className="text-gray-400">Loading...</p>
+    <div className="relative">
+      {/* Framer page as background */}
+      <iframe 
+        src="/page.html" 
+        className="w-full h-screen border-0"
+        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100vh' }}
+      />
+      
+      {/* Sign In button overlay */}
+      <div className="absolute top-4 right-4 z-50">
+        <Button 
+          onClick={handleSignIn}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2"
+        >
+          Sign In
+        </Button>
       </div>
     </div>
   );
