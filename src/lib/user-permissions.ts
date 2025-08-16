@@ -53,7 +53,7 @@ export function categorizeUserPages(userMetadata: unknown, userEmail?: string): 
     'arihant@berkeley.edu': 'arihant',
     'sksareen1@gmail.com': 'savar',
     'neeraj@example.com': 'neeraj',
-    'aaman@example.com': 'aaman',
+    'aaman.bilakhia@gmail.com': 'aaman',
     'sasa.krecinic@gmail.com': 'sasha',
     'sajjad@example.com': 'sajjad',
     'guy@ruttenbergiplaw.com': 'guy'

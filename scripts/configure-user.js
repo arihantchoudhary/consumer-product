@@ -29,7 +29,7 @@ const USER_CONFIGS = {
     allowedPages: ['neeraj'],
     role: 'user'
   },
-  'aaman@example.com': {
+  'aaman.bilakhia@gmail.com': {
     name: 'Aaman',
     agentId: 'agent_6301k2rzxtr7f04ba7z12786rrwr',
     allowedPages: ['aaman'],
