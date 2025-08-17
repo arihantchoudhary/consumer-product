@@ -23,6 +23,8 @@ export default function ChoosePage() {
       guy: { name: "Guy Ruttenberg", variant: "outline" as const },
       neeraj: { name: "Neeraj", variant: "outline" as const },
       aaman: { name: "Aaman", variant: "outline" as const },
+      parth: { name: "Parth", variant: "outline" as const },
+      srivardhan: { name: "Srivardhan", variant: "outline" as const },
       "transcript-analyzer": { name: "Transcript Analyzer", variant: "outline" as const },
       "legal-assistant": { name: "Legal Assistant", variant: "outline" as const },
     };
