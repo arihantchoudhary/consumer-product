@@ -1,4 +1,4 @@
-export type PageAccess = 'arihant' | 'savar' | 'sajjad' | 'guy' | 'sasha' | 'neeraj' | 'aaman' | 'transcript-analyzer' | 'legal-assistant';
+export type PageAccess = 'arihant' | 'savar' | 'sajjad' | 'guy' | 'sasha' | 'neeraj' | 'aaman' | 'parth' | 'srivardhan' | 'transcript-analyzer' | 'legal-assistant';
 
 export interface UserPermissions {
   allowedPages: PageAccess[];
@@ -52,11 +52,13 @@ export function categorizeUserPages(userMetadata: unknown, userEmail?: string): 
   const emailToPageMap: Record<string, PageAccess> = {
     'arihant@berkeley.edu': 'arihant',
     'sksareen1@gmail.com': 'savar',
-    'neeraj@example.com': 'neeraj',
+    'neerajagarwala123@gmail.com': 'neeraj',
     'aaman.bilakhia@gmail.com': 'aaman',
     'sasa.krecinic@gmail.com': 'sasha',
     'sajjad@example.com': 'sajjad',
-    'guy@ruttenbergiplaw.com': 'guy'
+    'guy@ruttenbergiplaw.com': 'guy',
+    'parth.behani@gmail.com': 'parth',
+    'srivardhanjalan@gmail.com': 'srivardhan'
   };
   
   // Pages that belong to current user regardless of email

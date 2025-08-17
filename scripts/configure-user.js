@@ -40,6 +40,12 @@ const USER_CONFIGS = {
     agentId: 'agent_0001k1cy1sc3e8ca6v60k01jkkz5',
     allowedPages: ['sasha'],
     role: 'user'
+  },
+  'parth.behani@gmail.com': {
+    name: 'Parth Behani',
+    agentId: 'agent_2101k2t7ysp2frmscya48yrb5w87',
+    allowedPages: ['parth'],
+    role: 'user'
   }
 };
 

@@ -22,6 +22,18 @@ export const ALLOWED_USERS: UserConfig[] = [
     name: 'Arihant Choudhary',
     agentId: 'agent_4001k2e8cqg2f3hswmrnt743wx09', // Arihant's ElevenLabs agent
   },
+  {
+    email: 'srivardhanjalan@gmail.com',
+    route: 'option1',
+    name: 'Srivardhan Jalan',
+    agentId: 'agent_0601k2t9dmfqfyrvffgzpqh3vyxy',
+  },
+  {
+    email: 'neerajagarwala123@gmail.com',
+    route: 'option1',
+    name: 'Neeraj Agarwala',
+    agentId: 'agent_3801k2rzfb2tfrks3eqssjbvw4s3',
+  },
   // Add more users as needed
 ];
 
