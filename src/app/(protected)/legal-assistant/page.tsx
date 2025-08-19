@@ -46,7 +46,7 @@ export default function LegalAssistantPage() {
   const startConversation = async () => {
     try {
       // Guy Ruttenberg's agent ID
-      const agentId = "agent_1501k2pzr2dxfb388ankf3qvhnh6";
+      const agentId = "agent_3001k3119h2vfzpvfxxc3d8tn8b6";
       
       await conversation.startSession({
         agentId,

@@ -13,19 +13,19 @@ const { StackServerApp } = require("@stackframe/stack");
 const USER_CONFIGS = {
   'arihant@berkeley.edu': {
     name: 'Arihant Choudhary',
-    agentId: 'agent_4001k2e8cqg2f3hswmrnt743wx09',
+    agentId: 'agent_7701k30qqnxces59w2a4tsxaneq9',
     allowedPages: ['arihant', 'savar', 'sajjad'], // Full access
     role: 'admin'
   },
   'savar@example.com': {
     name: 'Savar Sareen',
-    agentId: 'agent_0101k2kap218efft7zq85ej2dwyw',
+    agentId: 'agent_6501k310pz99fvkts53hqjte6v0p',
     allowedPages: ['savar'],
     role: 'user'
   },
   'neeraj@example.com': {
     name: 'Neeraj',
-    agentId: 'agent_3801k2rzfb2tfrks3eqssjbvw4s3',
+    agentId: 'agent_0501k30qjpw9fbharan0mmt0sj03',
     allowedPages: ['neeraj'],
     role: 'user'
   },

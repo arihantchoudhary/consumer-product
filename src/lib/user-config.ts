@@ -14,25 +14,25 @@ export const ALLOWED_USERS: UserConfig[] = [
     email: 'savar@example.com',
     route: 'option1',
     name: 'Savar Sareen',
-    agentId: 'agent_0101k2kap218efft7zq85ej2dwyw', // Savar's ElevenLabs agent
+    agentId: 'agent_6501k310pz99fvkts53hqjte6v0p', // Savar's ElevenLabs agent
   },
   {
     email: 'arihant@berkeley.edu',
     route: 'option2',
     name: 'Arihant Choudhary',
-    agentId: 'agent_4001k2e8cqg2f3hswmrnt743wx09', // Arihant's ElevenLabs agent
+    agentId: 'agent_7701k30qqnxces59w2a4tsxaneq9', // Arihant's ElevenLabs agent
   },
   {
     email: 'srivardhanjalan@gmail.com',
     route: 'option1',
     name: 'Srivardhan Jalan',
-    agentId: 'agent_0601k2t9dmfqfyrvffgzpqh3vyxy',
+    agentId: 'agent_0401k3115wwxeyd9s4pva81bts8q',
   },
   {
     email: 'neerajagarwala123@gmail.com',
     route: 'option1',
     name: 'Neeraj Agarwala',
-    agentId: 'agent_3801k2rzfb2tfrks3eqssjbvw4s3',
+    agentId: 'agent_0501k30qjpw9fbharan0mmt0sj03',
   },
   // Add more users as needed
 ];

@@ -9,7 +9,7 @@ import AnimatedBackground from "@/components/animated-background";
 import MeetingWelcomePane from "@/components/meeting-welcome-pane";
 
 export default function GuyPage() {
-  const AGENT_ID = "agent_6501k2sc1z35fm1b418v2nw756n3";
+  const AGENT_ID = "agent_3001k3119h2vfzpvfxxc3d8tn8b6";
   
   const [showWelcome, setShowWelcome] = useState(true);
   const [isLoading, setIsLoading] = useState(false);

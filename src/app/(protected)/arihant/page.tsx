@@ -74,7 +74,7 @@ export default function ArihantPage() {
   const startConversation = async () => {
     try {
       // Arihant's agent ID (you can update this with the actual agent ID)
-      const agentId = "agent_4001k2e8cqg2f3hswmrnt743wx09";
+      const agentId = "agent_7701k30qqnxces59w2a4tsxaneq9";
       
       await conversation.startSession({
         agentId,
