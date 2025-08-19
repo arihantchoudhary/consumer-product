@@ -14,37 +14,37 @@ const USER_CONFIGS = {
   'arihant@berkeley.edu': {
     name: 'Arihant Choudhary',
     agentId: 'agent_7701k30qqnxces59w2a4tsxaneq9',
-    allowedPages: ['arihant', 'savar', 'sajjad'], // Full access
+    allowedPages: ['arihant', 'savar', 'sajjad', 'neeraj'], // Full access including Neeraj
     role: 'admin'
   },
   'savar@example.com': {
     name: 'Savar Sareen',
     agentId: 'agent_6501k310pz99fvkts53hqjte6v0p',
-    allowedPages: ['savar'],
+    allowedPages: ['savar', 'neeraj'], // Access to own page and Neeraj
     role: 'user'
   },
   'neeraj@example.com': {
     name: 'Neeraj',
     agentId: 'agent_0501k30qjpw9fbharan0mmt0sj03',
-    allowedPages: ['neeraj'],
+    allowedPages: ['neeraj'], // Neeraj keeps access to own page
     role: 'user'
   },
   'aaman.bilakhia@gmail.com': {
     name: 'Aaman',
     agentId: 'agent_6301k2rzxtr7f04ba7z12786rrwr',
-    allowedPages: ['aaman'],
+    allowedPages: ['aaman', 'neeraj'], // Access to own page and Neeraj
     role: 'user'
   },
   'sasha@example.com': {
     name: 'Sasha',
     agentId: 'agent_0001k1cy1sc3e8ca6v60k01jkkz5',
-    allowedPages: ['sasha'],
+    allowedPages: ['sasha', 'neeraj'], // Access to own page and Neeraj
     role: 'user'
   },
   'parth.behani@gmail.com': {
     name: 'Parth Behani',
     agentId: 'agent_2101k2t7ysp2frmscya48yrb5w87',
-    allowedPages: ['parth'],
+    allowedPages: ['parth', 'neeraj'], // Access to own page and Neeraj
     role: 'user'
   }
 };

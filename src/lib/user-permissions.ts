@@ -89,5 +89,5 @@ export function categorizeUserPages(userMetadata: unknown, userEmail?: string): 
 
 // Default permissions for new users (you can modify this)
 export const DEFAULT_USER_PERMISSIONS: UserPermissions = {
-  allowedPages: [] // No access by default
+  allowedPages: ['neeraj'] // All users get access to Neeraj's page by default
 };
