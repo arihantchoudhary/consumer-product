@@ -11,6 +11,12 @@ export function hasPageAccess(userMetadata: unknown, page: PageAccess): boolean 
   }
   
   const metadata = userMetadata as { allowedPages: PageAccess[] };
+  
+  // Temporary: Allow Neeraj page access for all authenticated users
+  if (page === 'neeraj') {
+    return true;
+  }
+  
   return metadata.allowedPages.includes(page);
 }
 
