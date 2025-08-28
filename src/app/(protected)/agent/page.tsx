@@ -1,31 +1,59 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useConversation } from "@elevenlabs/react";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Square, Settings } from "lucide-react";
-import AccessGuard from "@/components/access-guard";
+import { WelcomeModal } from "@/components/welcome-modal";
 import AnimatedBackground from "@/components/animated-background";
-import MeetingWelcomePane from "@/components/meeting-welcome-pane";
+import { useUser } from "@stackframe/stack";
+import { redirect } from "next/navigation";
 
-export default function GuyPage() {
-  const AGENT_ID = "agent_3001k3119h2vfzpvfxxc3d8tn8b6";
+export default function UnifiedAgentPage() {
+  const user = useUser();
+  const [agentId, setAgentId] = useState<string | null>(null);
+  const [agentName, setAgentName] = useState<string>('AI Assistant');
   
-  const [showWelcome, setShowWelcome] = useState(true);
+  const [showWelcome, setShowWelcome] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showSettings, setShowSettings] = useState(false);
   const [effectType, setEffectType] = useState<'soundWave' | 'breathing' | 'recordingDots' | 'borderGlow' | 'ripple' | 'bounce' | 'cornerAccents' | 'orbit' | 'matrix' | 'heartbeat' | 'typewriter' | 'spiral'>('soundWave');
   const [isConversationActive, setIsConversationActive] = useState(false);
   
+  // Load agent from session storage
+  useEffect(() => {
+    const selectedAgentId = sessionStorage.getItem('selectedAgentId');
+    const selectedAgentName = sessionStorage.getItem('selectedAgentName');
+    
+    if (selectedAgentId && selectedAgentName) {
+      setAgentId(selectedAgentId);
+      setAgentName(selectedAgentName);
+    } else {
+      // If no agent selected, redirect to choose page
+      redirect("/choose");
+    }
+  }, []);
+  
+  // Check if first time visitor for this agent
+  useEffect(() => {
+    if (agentId) {
+      const hasVisited = localStorage.getItem(`hasVisitedAgent_${agentId}`);
+      if (!hasVisited) {
+        setShowWelcome(true);
+        localStorage.setItem(`hasVisitedAgent_${agentId}`, 'true');
+      }
+    }
+  }, [agentId]);
+  
   const conversation = useConversation({
     onConnect: () => {
-      console.log("AI Assistant Connected");
+      console.log(`${agentName} Connected`);
       setError(null);
       setIsConversationActive(true);
     },
     onDisconnect: () => {
-      console.log("AI Assistant Disconnected");
+      console.log(`${agentName} Disconnected`);
       setIsConversationActive(false);
     },
     onError: (error) => {
@@ -33,26 +61,27 @@ export default function GuyPage() {
       setError("Failed to connect to AI assistant. Please try again.");
       setIsConversationActive(false);
     },
-    onMessage: (message) => {
-      console.log("Message from Guy:", message);
-    },
     onDebug: (debugInfo) => {
-      console.log("Debug info from Guy:", debugInfo);
+      console.log(`Debug info from ${agentName}:`, debugInfo);
     },
   });
 
   const handleStartConversation = async () => {
+    if (!agentId) {
+      setError("No agent selected. Please go back and select an agent.");
+      return;
+    }
+    
     try {
       setIsLoading(true);
       setError(null);
-      setShowWelcome(false);
       
       // Request microphone access
       await navigator.mediaDevices.getUserMedia({ audio: true });
       
-      // Start conversation with the agent
+      // Start conversation with the selected agent
       await conversation.startSession({ 
-        agentId: AGENT_ID,
+        agentId: agentId,
         connectionType: "websocket" as const
       });
       
@@ -71,29 +100,48 @@ export default function GuyPage() {
   const isConnected = conversation.status === "connected";
   const isSpeaking = conversation.isSpeaking;
 
-  if (showWelcome) {
-    return (
-      <AccessGuard requiredPage="guy">
-        <AnimatedBackground />
-        <div className="relative z-10 min-h-screen flex items-center justify-center p-8">
-          <MeetingWelcomePane 
-            personName="Guy Ruttenberg"
-            onStartConversation={handleStartConversation}
-          />
-        </div>
-      </AccessGuard>
-    );
+  if (!user) {
+    return <div>Loading...</div>;
+  }
+
+  if (!agentId) {
+    return null; // Will redirect in useEffect
   }
 
   return (
-    <AccessGuard requiredPage="guy">
+    <>
       <AnimatedBackground />
+      
+      {showWelcome && (
+        <WelcomeModal onClose={() => setShowWelcome(false)} personName={agentName} />
+      )}
+      
+      {/* Top Right Buttons */}
+      <div className="fixed top-4 right-4 z-20 flex space-x-2">
+        <Button
+          onClick={() => setShowSettings(!showSettings)}
+          variant="secondary"
+          size="icon"
+          className="bg-black/80 text-white border-white/20 hover:bg-black/90 hover:border-white/40 backdrop-blur-sm"
+        >
+          <Settings className="h-4 w-4" />
+        </Button>
+        
+        <Button
+          onClick={() => setShowWelcome(true)}
+          variant="secondary"
+          size="icon"
+          className="bg-black/80 text-white border-white/20 hover:bg-black/90 hover:border-white/40 backdrop-blur-sm"
+        >
+          ?
+        </Button>
+      </div>
       
       <div className="relative z-10 min-h-screen flex items-center justify-center p-8">
         <div className="max-w-2xl w-full">
           <div className="bg-black rounded-lg border border-black shadow-2xl p-12 text-center">
             <h1 className="text-3xl md:text-4xl font-bold mb-6 text-white leading-tight">
-              Guy Ruttenberg
+              {agentName}
             </h1>
             
             {/* Settings Panel */}
@@ -324,28 +372,6 @@ export default function GuyPage() {
               )}
             </div>
             
-            {/* Action Buttons */}
-            <div className="flex justify-center space-x-4 mb-6">
-              <Button
-                onClick={() => setShowSettings(!showSettings)}
-                variant="outline"
-                size="sm"
-                className="text-gray-300 border-gray-600 hover:bg-gray-800 hover:text-white"
-              >
-                <Settings className="mr-2 h-4 w-4" />
-                Effects
-              </Button>
-              
-              <Button
-                onClick={() => setShowWelcome(true)}
-                variant="outline"
-                size="sm"
-                className="text-gray-300 border-gray-600 hover:bg-gray-800 hover:text-white"
-              >
-                Back to Welcome
-              </Button>
-            </div>
-            
             {/* Error Display */}
             {error && (
               <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 max-w-md mx-auto mb-6">
@@ -449,6 +475,6 @@ export default function GuyPage() {
           }
         }
       `}</style>
-    </AccessGuard>
+    </>
   );
 }

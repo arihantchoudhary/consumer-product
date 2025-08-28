@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 
-export default function AnimatedBackground() {
+const AnimatedBackground = React.memo(function AnimatedBackground() {
   // Generate consistent random values for SSR/client consistency
   const centerWaveData = useMemo(() => {
     return Array.from({ length: 25 }, (_, i) => ({
@@ -215,4 +215,6 @@ export default function AnimatedBackground() {
       `}</style>
     </>
   );
-}
+});
+
+export default AnimatedBackground;

@@ -1,13 +1,19 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useUser } from "@stackframe/stack";
 import { Button } from "@/components/ui/button";
 
 export default function RootPage() {
   const router = useRouter();
+  const user = useUser();
 
-  const handleSignIn = () => {
-    router.push("/sign-in");
+  const handleButtonClick = () => {
+    if (user) {
+      router.push("/choose");
+    } else {
+      router.push("/sign-in");
+    }
   };
 
   return (
@@ -19,13 +25,13 @@ export default function RootPage() {
         style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100vh' }}
       />
       
-      {/* Sign In button overlay */}
+      {/* Sign In/Dashboard button overlay */}
       <div className="absolute top-4 right-4 z-50">
         <Button 
-          onClick={handleSignIn}
+          onClick={handleButtonClick}
           className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2"
         >
-          Sign In
+          {user ? "Dashboard" : "Sign In"}
         </Button>
       </div>
     </div>

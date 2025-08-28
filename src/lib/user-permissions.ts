@@ -1,4 +1,18 @@
-export type PageAccess = 'arihant' | 'savar' | 'sajjad' | 'guy' | 'sasha' | 'neeraj' | 'aaman' | 'parth' | 'srivardhan' | 'transcript-analyzer' | 'legal-assistant';
+// User permissions and metadata handling
+
+export type PageAccess = 
+  | 'savar' 
+  | 'arihant' 
+  | 'sajjad' 
+  | 'neeraj'
+  | 'sasha'
+  | 'aaman'
+  | 'guy'
+  | 'parth'
+  | 'srivardhan'
+  | 'transcript-analyzer'
+  | 'legal-assistant'
+  | 'dashboard';
 
 export interface UserPermissions {
   allowedPages: PageAccess[];
@@ -6,24 +20,14 @@ export interface UserPermissions {
 
 // Check if user has access to a specific page
 export function hasPageAccess(userMetadata: unknown, page: PageAccess): boolean {
-  if (!userMetadata || typeof userMetadata !== 'object' || !('allowedPages' in userMetadata)) {
-    return false;
-  }
-  
-  const metadata = userMetadata as { allowedPages: PageAccess[] };
-  
-  // Temporary: Allow Neeraj page access for all authenticated users
-  if (page === 'neeraj') {
-    return true;
-  }
-  
-  return metadata.allowedPages.includes(page);
+  const allowedPages = getUserAllowedPages(userMetadata);
+  return allowedPages.includes(page);
 }
 
-// Get all pages a user has access to
+// Get user's allowed pages from metadata
 export function getUserAllowedPages(userMetadata: unknown): PageAccess[] {
   if (!userMetadata || typeof userMetadata !== 'object' || !('allowedPages' in userMetadata)) {
-    return [];
+    return ['neeraj']; // Default access to Neeraj's page
   }
   
   const metadata = userMetadata as { allowedPages: PageAccess[] };
@@ -40,60 +44,24 @@ export function getUserAgentId(userMetadata: unknown): string | null {
   return metadata.agentId;
 }
 
-// Categorize pages into owned vs accessible based on user email and page mapping
-export function categorizeUserPages(userMetadata: unknown, userEmail?: string): {
-  ownedPages: PageAccess[];
-  otherPages: PageAccess[];
-} {
-  const allowedPages = getUserAllowedPages(userMetadata);
-  
-  if (!userEmail) {
-    return {
-      ownedPages: [],
-      otherPages: allowedPages
-    };
+// Get user's name from metadata
+export function getUserName(userMetadata: unknown): string | null {
+  if (!userMetadata || typeof userMetadata !== 'object' || !('name' in userMetadata)) {
+    return null;
   }
   
-  // Map user emails to their owned page
-  const emailToPageMap: Record<string, PageAccess> = {
-    'arihant@berkeley.edu': 'arihant',
-    'sksareen1@gmail.com': 'savar',
-    'neerajagarwala123@gmail.com': 'neeraj',
-    'aaman.bilakhia@gmail.com': 'aaman',
-    'sasa.krecinic@gmail.com': 'sasha',
-    'sajjad@example.com': 'sajjad',
-    'guy@ruttenbergiplaw.com': 'guy',
-    'parth.behani@gmail.com': 'parth',
-    'srivardhanjalan@gmail.com': 'srivardhan'
-  };
-  
-  // Pages that belong to current user regardless of email
-  const specialOwnedPages: PageAccess[] = ['transcript-analyzer'];
-  
-  // Pages that belong only to specific users
-  const restrictedOwnedPages: Record<string, PageAccess[]> = {
-    'guy@ruttenbergiplaw.com': ['legal-assistant'],
-    'arihant@berkeley.edu': ['legal-assistant']
-  };
-  
-  const ownedPage = emailToPageMap[userEmail.toLowerCase()];
-  const ownedPages: PageAccess[] = [];
-  const otherPages: PageAccess[] = [];
-  
-  const userRestrictedPages = restrictedOwnedPages[userEmail.toLowerCase()] || [];
-  
-  allowedPages.forEach(page => {
-    if (page === ownedPage || specialOwnedPages.includes(page) || userRestrictedPages.includes(page)) {
-      ownedPages.push(page);
-    } else {
-      otherPages.push(page);
-    }
-  });
-  
-  return { ownedPages, otherPages };
+  const metadata = userMetadata as { name: string };
+  return metadata.name;
 }
 
-// Default permissions for new users (you can modify this)
-export const DEFAULT_USER_PERMISSIONS: UserPermissions = {
-  allowedPages: ['neeraj'] // All users get access to Neeraj's page by default
-};
+// Update user metadata
+export async function updateUserMetadata(user: any, updates: Partial<{
+  agentId: string;
+  name: string;
+  allowedPages: PageAccess[];
+}>): Promise<void> {
+  // This function would need to be implemented with Stack Auth API
+  // For now, it's a placeholder showing the interface
+  console.log('Updating user metadata:', updates);
+  // TODO: Implement actual Stack Auth update call
+}
