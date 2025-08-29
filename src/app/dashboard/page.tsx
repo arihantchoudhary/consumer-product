@@ -3,6 +3,7 @@
 import { Suspense, useState, useEffect, useCallback, useMemo } from "react";
 import AnimatedBackground from "@/components/animated-background";
 import { GreetingSection } from "@/components/dashboard-page/GreetingSection";
+import { SecretarySection } from "@/components/dashboard-page/SecretarySection";
 import { Loader2, Plus, Bot, Play, MoreVertical, Link2, Phone, Clock, Calendar, MessageSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,7 +17,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -201,228 +201,238 @@ function DashboardContent() {
             {/* Greeting Section */}
             <GreetingSection />
             
-            {/* Tabs for Agents and Conversations */}
-            <Tabs defaultValue="agents" className="w-full">
-              <TabsList className="bg-white/90 backdrop-blur-xl border border-gray-200">
-                <TabsTrigger value="agents" className="data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700">
-                  <Bot className="h-4 w-4 mr-2" />
-                  My Agents
-                </TabsTrigger>
-                <TabsTrigger value="conversations" className="data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700">
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  Past Conversations
-                </TabsTrigger>
-              </TabsList>
-              
-              {/* Agents Tab */}
-              <TabsContent value="agents">
-                <Card className="bg-white/90 backdrop-blur-xl border-gray-200">
-                  <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle className="text-xl font-semibold text-gray-900">My Agents</CardTitle>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="bg-gray-100 border-gray-300 text-gray-900 hover:bg-gray-200"
-                      onClick={() => setCreateModalOpen(true)}
-                    >
-                      <Plus className="h-4 w-4 mr-1" />
-                      Create Agent
-                    </Button>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="relative">
-                      {/* Carousel container */}
-                      <div className="overflow-x-auto scrollbar-hide">
-                        <div className="flex gap-4 pb-4 pl-4" style={{ scrollSnapType: 'x mandatory' }}>
-                          {/* Agent cards */}
-                          {createdAgents.length > 0 ? (
-                            createdAgents.map((agent: { id: string; name: string; createdAt?: string }) => (
-                              <div
-                                key={agent.id}
-                                className="flex-none w-64 bg-white rounded-lg border border-gray-200 p-4 hover:bg-gray-50 transition-all cursor-pointer shadow-sm"
-                                style={{ scrollSnapAlign: 'start' }}
-                              >
-                                <div className="flex items-start justify-between mb-3">
-                                  <div className="flex items-center gap-3">
-                                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-white font-bold">
-                                      {agent.name?.substring(0, 2).toUpperCase() || "AI"}
-                                    </div>
-                                    <div className="flex-1">
-                                      <h4 className="text-gray-900 font-medium">{agent.name}</h4>
-                                      <p className="text-gray-500 text-xs">
-                                        {agent.createdAt ? new Date(agent.createdAt).toLocaleDateString() : "Recently created"}
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                      <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="h-8 w-8 p-0 text-gray-400 hover:text-gray-600"
-                                      >
-                                        <MoreVertical className="h-4 w-4" />
-                                      </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                      <DropdownMenuItem onClick={() => handleShareAgent(agent.id)}>
-                                        <Link2 className="mr-2 h-4 w-4" />
-                                        Share
-                                      </DropdownMenuItem>
-                                      <DropdownMenuItem 
-                                        onClick={() => {
-                                          setAgentToDelete(agent);
-                                          setDeleteDialogOpen(true);
-                                        }}
-                                        className="text-red-600 hover:text-red-700"
-                                      >
-                                        <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                        Remove
-                                      </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                  </DropdownMenu>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                  <Button
-                                    size="sm"
-                                    className="bg-blue-500 hover:bg-blue-600 text-white border-0"
-                                    onClick={() => router.push(`/agent/${agent.id}`)}
-                                  >
-                                    <Play className="h-3 w-3 mr-1" />
-                                    Talk
-                                  </Button>
-                                </div>
+            {/* Secretary Section - Full Width */}
+            <SecretarySection />
+            
+            {/* My Agents and Friends Section - Side by Side */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* My Agents Section */}
+              <Card className="bg-white/90 backdrop-blur-xl border-gray-200">
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <CardTitle className="text-xl font-semibold text-gray-900">My Agents</CardTitle>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="bg-gray-100 border-gray-300 text-gray-900 hover:bg-gray-200"
+                    onClick={() => setCreateModalOpen(true)}
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    Create Agent
+                  </Button>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {/* Agent cards - vertical list */}
+                    {createdAgents.length > 0 ? (
+                      createdAgents.map((agent: { id: string; name: string; createdAt?: string }) => (
+                        <div
+                          key={agent.id}
+                          className="bg-white rounded-lg border border-gray-200 p-4 hover:bg-gray-50 transition-all shadow-sm"
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-white font-bold">
+                                {agent.name?.substring(0, 2).toUpperCase() || "AI"}
                               </div>
-                            ))
-                          ) : (
-                            <div className="flex-none w-64 bg-white rounded-lg border border-gray-200 p-8 flex items-center justify-center shadow-sm">
-                              <p className="text-gray-500 text-center">No agents yet. Create your first one!</p>
+                              <div>
+                                <h4 className="text-gray-900 font-medium">{agent.name}</h4>
+                                <p className="text-gray-500 text-xs">
+                                  {agent.createdAt ? new Date(agent.createdAt).toLocaleDateString() : "Recently created"}
+                                </p>
+                              </div>
                             </div>
-                          )}
-                          
-                          {/* Add new agent card */}
-                          <div
-                            className="flex-none w-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed p-4 hover:bg-gray-100 transition-all cursor-pointer flex items-center justify-center"
-                            style={{ scrollSnapAlign: 'start' }}
-                            onClick={() => setCreateModalOpen(true)}
-                          >
-                            <div className="text-center">
-                              <Plus className="h-8 w-8 text-gray-500 mx-auto mb-2" />
-                              <p className="text-gray-500">Create New Agent</p>
+                            <div className="flex items-center gap-2">
+                              <Button
+                                size="sm"
+                                className="bg-blue-500 hover:bg-blue-600 text-white border-0"
+                                onClick={() => router.push(`/agent/${agent.id}`)}
+                              >
+                                <Play className="h-3 w-3 mr-1" />
+                                Talk
+                              </Button>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-8 w-8 p-0 text-gray-400 hover:text-gray-600"
+                                  >
+                                    <MoreVertical className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem onClick={() => handleShareAgent(agent.id)}>
+                                    <Link2 className="mr-2 h-4 w-4" />
+                                    Share
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem 
+                                    onClick={() => {
+                                      setAgentToDelete(agent);
+                                      setDeleteDialogOpen(true);
+                                    }}
+                                    className="text-red-600 hover:text-red-700"
+                                  >
+                                    <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                    Remove
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      
-                      {/* Scroll indicators */}
-                      <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none" />
-                      <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white to-transparent pointer-events-none" />
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              
-              {/* Conversations Tab */}
-              <TabsContent value="conversations">
-                <Card className="bg-white/90 backdrop-blur-xl border-gray-200">
-                  <CardHeader>
-                    <CardTitle className="text-xl font-semibold text-gray-900">Past Conversations</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    {loadingConversations ? (
-                      <div className="flex justify-center py-8">
-                        <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
-                      </div>
-                    ) : conversations.filter((conv) => 
-                      createdAgents.some((agent: { id: string; name: string }) => agent.id === conv.agent_id)
-                    ).length > 0 ? (
-                      <div className="space-y-3">
-                        {conversations
-                          .filter((conv) => {
-                            // Only show conversations from agents in user's metadata
-                            return createdAgents.some((agent: { id: string; name: string }) => agent.id === conv.agent_id);
-                          })
-                          .map((conv) => {
-                          const agent = createdAgents.find((a: { id: string; name: string }) => a.id === conv.agent_id);
-                          return (
-                            <div
-                              key={conv.conversation_id}
-                              className="bg-white rounded-lg border border-gray-200 p-4 hover:bg-gray-50 transition-all"
-                            >
-                              <div className="flex items-start justify-between">
-                                <div className="flex-1">
-                                  <div className="flex items-center gap-3 mb-2">
-                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-white font-bold text-sm">
-                                      {agent?.name?.substring(0, 2).toUpperCase() || "AI"}
-                                    </div>
-                                    <div>
-                                      <h4 className="font-medium text-gray-900">
-                                        {conv.agent_name || agent?.name || "Unknown Agent"}
-                                      </h4>
-                                      <div className="flex items-center gap-4 text-sm text-gray-500">
-                                        <span className="flex items-center gap-1">
-                                          <Calendar className="h-3 w-3" />
-                                          {formatDate(conv.start_time_unix_secs)}
-                                        </span>
-                                        <span className="flex items-center gap-1">
-                                          <Clock className="h-3 w-3" />
-                                          {formatDuration(conv.call_duration_secs)}
-                                        </span>
-                                        <span className="flex items-center gap-1">
-                                          <MessageSquare className="h-3 w-3" />
-                                          {conv.message_count} messages
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  {conv.transcript_summary && (
-                                    <p className="text-sm text-gray-600 mt-2 line-clamp-2">
-                                      {conv.transcript_summary}
-                                    </p>
-                                  )}
-                                </div>
-                                <div className="flex items-center gap-2">
-                                  <span className={`text-xs px-2 py-1 rounded-full ${
-                                    conv.call_successful === 'success' 
-                                      ? 'bg-green-100 text-green-700'
-                                      : 'bg-red-100 text-red-700'
-                                  }`}>
-                                    {conv.call_successful === 'success' ? 'Successful' : 'Failed'}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                        
-                        {hasMore && (
-                          <div className="flex justify-center pt-4">
-                            <Button
-                              variant="outline"
-                              onClick={() => fetchConversations(nextCursor || undefined)}
-                              disabled={loadingConversations}
-                            >
-                              {loadingConversations ? (
-                                <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                              ) : null}
-                              Load More
-                            </Button>
-                          </div>
-                        )}
-                      </div>
+                      ))
                     ) : (
-                      <div className="text-center py-8">
-                        <Phone className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                        <p className="text-gray-500">No conversations yet</p>
-                        <p className="text-sm text-gray-400 mt-1">Start talking to your agents to see conversations here</p>
+                      <div className="bg-gray-50 rounded-lg p-8 text-center">
+                        <Bot className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                        <p className="text-gray-500">No agents yet. Create your first one!</p>
+                        <Button
+                          size="sm"
+                          className="mt-4 bg-blue-500 hover:bg-blue-600 text-white border-0"
+                          onClick={() => setCreateModalOpen(true)}
+                        >
+                          <Plus className="h-4 w-4 mr-1" />
+                          Create Agent
+                        </Button>
                       </div>
                     )}
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              {/* Friends Section */}
+              <Card className="bg-white/90 backdrop-blur-xl border-gray-200">
+                <CardHeader>
+                  <CardTitle className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    Friends
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {/* Friend list */}
+                    <div className="bg-gray-50 rounded-lg p-8 text-center">
+                      <svg className="h-12 w-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                      </svg>
+                      <p className="text-gray-500">No friends yet</p>
+                      <p className="text-sm text-gray-400 mt-1">Connect with others to see them here</p>
+                      <Button
+                        size="sm"
+                        className="mt-4 bg-purple-500 hover:bg-purple-600 text-white border-0"
+                        disabled
+                      >
+                        <Plus className="h-4 w-4 mr-1" />
+                        Add Friend (Coming Soon)
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+            
+            {/* Conversations Section */}
+            <Card className="bg-white/90 backdrop-blur-xl border-gray-200">
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle className="text-xl font-semibold text-gray-900">
+                  <MessageSquare className="h-5 w-5 inline-block mr-2" />
+                  Past Conversations
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {loadingConversations ? (
+                  <div className="flex justify-center py-8">
+                    <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
+                  </div>
+                ) : conversations.filter((conv) => 
+                  createdAgents.some((agent: { id: string; name: string }) => agent.id === conv.agent_id)
+                ).length > 0 ? (
+                  <div className="space-y-3">
+                    {conversations
+                      .filter((conv) => {
+                        // Only show conversations from agents in user's metadata
+                        return createdAgents.some((agent: { id: string; name: string }) => agent.id === conv.agent_id);
+                      })
+                      .map((conv) => {
+                      const agent = createdAgents.find((a: { id: string; name: string }) => a.id === conv.agent_id);
+                      return (
+                        <div
+                          key={conv.conversation_id}
+                          className="bg-white rounded-lg border border-gray-200 p-4 hover:bg-gray-50 transition-all"
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-3 mb-2">
+                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-white font-bold text-sm">
+                                  {agent?.name?.substring(0, 2).toUpperCase() || "AI"}
+                                </div>
+                                <div>
+                                  <h4 className="font-medium text-gray-900">
+                                    {conv.agent_name || agent?.name || "Unknown Agent"}
+                                  </h4>
+                                  <div className="flex items-center gap-4 text-sm text-gray-500">
+                                    <span className="flex items-center gap-1">
+                                      <Calendar className="h-3 w-3" />
+                                      {formatDate(conv.start_time_unix_secs)}
+                                    </span>
+                                    <span className="flex items-center gap-1">
+                                      <Clock className="h-3 w-3" />
+                                      {formatDuration(conv.call_duration_secs)}
+                                    </span>
+                                    <span className="flex items-center gap-1">
+                                      <MessageSquare className="h-3 w-3" />
+                                      {conv.message_count} messages
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              {conv.transcript_summary && (
+                                <p className="text-sm text-gray-600 mt-2 line-clamp-2">
+                                  {conv.transcript_summary}
+                                </p>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className={`text-xs px-2 py-1 rounded-full ${
+                                conv.call_successful === 'success' 
+                                  ? 'bg-green-100 text-green-700'
+                                  : 'bg-red-100 text-red-700'
+                              }`}>
+                                {conv.call_successful === 'success' ? 'Successful' : 'Failed'}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                    
+                    {hasMore && (
+                      <div className="flex justify-center pt-4">
+                        <Button
+                          variant="outline"
+                          onClick={() => fetchConversations(nextCursor || undefined)}
+                          disabled={loadingConversations}
+                        >
+                          {loadingConversations ? (
+                            <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                          ) : null}
+                          Load More
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <Phone className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                    <p className="text-gray-500">No conversations yet</p>
+                    <p className="text-sm text-gray-400 mt-1">Start talking to your agents to see conversations here</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
             
           </div>
       </div>
