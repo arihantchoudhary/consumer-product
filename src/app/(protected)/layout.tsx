@@ -2,10 +2,10 @@
 
 import { useUser } from "@stackframe/stack";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { Loader2 } from "lucide-react";
 
-export default function ProtectedLayout({
+function ProtectedContent({
   children,
 }: {
   children: React.ReactNode;
@@ -45,4 +45,27 @@ export default function ProtectedLayout({
   }
 
   return <>{children}</>;
+}
+
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="text-center">
+        <Loader2 className="h-8 w-8 animate-spin text-gray-600 mx-auto mb-4" />
+        <p className="text-gray-400">Loading...</p>
+      </div>
+    </div>
+  );
+}
+
+export default function ProtectedLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <ProtectedContent>{children}</ProtectedContent>
+    </Suspense>
+  );
 }

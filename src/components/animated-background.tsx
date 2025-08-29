@@ -1,8 +1,11 @@
 "use client";
 
 import { useMemo } from "react";
+import { useBackgroundSettings } from "@/contexts/background-settings";
 
 export default function AnimatedBackground() {
+  const { colors } = useBackgroundSettings();
+  
   // Generate consistent random values for SSR/client consistency
   const centerWaveData = useMemo(() => {
     return Array.from({ length: 25 }, (_, i) => ({
@@ -81,14 +84,26 @@ export default function AnimatedBackground() {
         </div>
         
         {/* Gradient Orbs */}
-        <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-red-500 opacity-30 blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-blue-500 opacity-30 blur-3xl animate-pulse animation-delay-2000"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-96 w-96 rounded-full bg-purple-600 opacity-20 blur-3xl animate-pulse animation-delay-4000"></div>
-        <div className="absolute top-1/4 right-1/4 h-60 w-60 rounded-full bg-pink-500 opacity-25 blur-3xl animate-pulse animation-delay-3000"></div>
-        <div className="absolute bottom-1/4 left-1/4 h-72 w-72 rounded-full bg-indigo-500 opacity-25 blur-3xl animate-pulse animation-delay-5000"></div>
-        
-        {/* Animated Grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]"></div>
+        <div 
+          className="absolute -top-40 -right-40 h-80 w-80 rounded-full opacity-40 blur-[120px] animate-pulse"
+          style={{ backgroundColor: colors.red }}
+        ></div>
+        <div 
+          className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full opacity-40 blur-[120px] animate-pulse animation-delay-2000"
+          style={{ backgroundColor: colors.blue }}
+        ></div>
+        <div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-96 w-96 rounded-full opacity-30 blur-[150px] animate-pulse animation-delay-4000"
+          style={{ backgroundColor: colors.purple }}
+        ></div>
+        <div 
+          className="absolute top-1/4 right-1/4 h-60 w-60 rounded-full opacity-35 blur-[100px] animate-pulse animation-delay-3000"
+          style={{ backgroundColor: colors.pink }}
+        ></div>
+        <div 
+          className="absolute bottom-1/4 left-1/4 h-72 w-72 rounded-full opacity-35 blur-[110px] animate-pulse animation-delay-5000"
+          style={{ backgroundColor: colors.indigo }}
+        ></div>
         
         {/* Floating Particles */}
         <div className="absolute inset-0">

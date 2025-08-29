@@ -8,9 +8,12 @@ importers:
 
   .:
     dependencies:
+      '@elevenlabs/client':
+        specifier: ^0.5.2
+        version: 0.5.2(@types/dom-mediacapture-record@1.0.22)
       '@elevenlabs/react':
-        specifier: ^0.5.0
-        version: 0.5.0(@types/dom-mediacapture-record@1.0.22)(react@19.1.0)
+        specifier: ^0.5.2
+        version: 0.5.2(@types/dom-mediacapture-record@1.0.22)(react@19.1.0)
       '@hookform/resolvers':
         specifier: ^5.2.1
         version: 5.2.1(react-hook-form@7.62.0(react@19.1.0))
@@ -224,11 +227,11 @@ packages:
   '@date-fns/tz@1.4.1':
     resolution: {integrity: sha512-P5LUNhtbj6YfI3iJjw5EL9eUAG6OitD0W3fWQcpQjDRc/QIsL0tRNuO1PcDvPccWL1fSTXXdE1ds+l95DV/OFA==}
 
-  '@elevenlabs/client@0.5.0':
-    resolution: {integrity: sha512-w2DdDYU4rW5jMbnw/WfYLk66m+Wx1CYkhYJu8mKJsnmRuncR/2p4YQQ5TEovNz8ngzFopWofqXNximRxoOfLtA==}
+  '@elevenlabs/client@0.5.2':
+    resolution: {integrity: sha512-u61aUgYAPWkkHhwfr53WHDBf13Z4feCyFZHgsrpnwnNsM9fejWWRAR4CbvzxKY1svWAXSdlcnrwdrZidDGBDnw==}
 
-  '@elevenlabs/react@0.5.0':
-    resolution: {integrity: sha512-Lf0oixxSydr6o13QUUyB9mI8zP3dxsI3RNlIYLCmBtPMc96nhwQeMo0gdSWcBJS98nwEp+7EYSZIIgE6drKJoQ==}
+  '@elevenlabs/react@0.5.2':
+    resolution: {integrity: sha512-/mw/LMcGfOIjhqaeslyZpsM506emDN/0VtBIEF0Acdyvhl/L3KNob7CzvQuJiw1DG3QGNYQh4XlEeH7OBxcxeg==}
     peerDependencies:
       react: '>=16.8.0'
 
@@ -4518,15 +4521,15 @@ snapshots:
 
   '@date-fns/tz@1.4.1': {}
 
-  '@elevenlabs/client@0.5.0(@types/dom-mediacapture-record@1.0.22)':
+  '@elevenlabs/client@0.5.2(@types/dom-mediacapture-record@1.0.22)':
     dependencies:
       livekit-client: 2.15.4(@types/dom-mediacapture-record@1.0.22)
     transitivePeerDependencies:
       - '@types/dom-mediacapture-record'
 
-  '@elevenlabs/react@0.5.0(@types/dom-mediacapture-record@1.0.22)(react@19.1.0)':
+  '@elevenlabs/react@0.5.2(@types/dom-mediacapture-record@1.0.22)(react@19.1.0)':
     dependencies:
-      '@elevenlabs/client': 0.5.0(@types/dom-mediacapture-record@1.0.22)
+      '@elevenlabs/client': 0.5.2(@types/dom-mediacapture-record@1.0.22)
       react: 19.1.0
     transitivePeerDependencies:
       - '@types/dom-mediacapture-record'

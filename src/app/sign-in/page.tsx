@@ -14,7 +14,7 @@ export default function SignInPage() {
   // Check if user is already authenticated
   useEffect(() => {
     if (user) {
-      router.push("/choose");
+      router.push("/dashboard");
     }
   }, [user, router]);
 

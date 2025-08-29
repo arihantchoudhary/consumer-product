@@ -61,7 +61,7 @@ export default function AccessGuard({ requiredPage, children }: AccessGuardProps
           </p>
           <div className="space-y-3">
             <Button
-              onClick={() => router.push("/choose")}
+              onClick={() => router.push("/dashboard")}
               className="w-full"
             >
               Go to Dashboard
