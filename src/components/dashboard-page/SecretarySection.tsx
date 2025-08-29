@@ -19,7 +19,7 @@ export function SecretarySection() {
       </CardHeader>
       <CardContent className="space-y-3">
         <p className="text-gray-300 text-sm mb-4">
-          I'm here to help you manage your day efficiently.
+          I&apos;m here to help you manage your day efficiently.
         </p>
         {quickActions.map((action, index) => (
           <Button

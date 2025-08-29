@@ -35,7 +35,7 @@ export function BackgroundSettingsModal() {
         setError("");
         setOpen(false);
       }
-    } catch (e) {
+    } catch {
       setError("Invalid JSON format");
     }
   };

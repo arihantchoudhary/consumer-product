@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -151,7 +151,7 @@ function CreateAgentModalContent({ open, onOpenChange, onSuccess }: CreateAgentM
               className="bg-white border-gray-300 text-gray-900 placeholder-gray-400"
               required
             />
-            <p className="text-xs text-gray-500">Define your agent's behavior and personality</p>
+            <p className="text-xs text-gray-500">Define your agent&apos;s behavior and personality</p>
           </div>
 
           <DialogFooter>

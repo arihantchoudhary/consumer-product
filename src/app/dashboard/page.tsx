@@ -1,12 +1,9 @@
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useCallback, useMemo } from "react";
 import AnimatedBackground from "@/components/animated-background";
 import { GreetingSection } from "@/components/dashboard-page/GreetingSection";
-import { SecretarySection } from "@/components/dashboard-page/SecretarySection";
-import { RecentFriendsSection } from "@/components/dashboard-page/RecentFriendsSection";
-import { FavoriteAgentsSection } from "@/components/dashboard-page/FavoriteAgentsSection";
-import { Loader2, Search, Plus, Bot, Play, MoreVertical, Link2, Phone, Clock, Calendar, MessageSquare } from "lucide-react";
+import { Loader2, Plus, Bot, Play, MoreVertical, Link2, Phone, Clock, Calendar, MessageSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -43,16 +40,37 @@ function DashboardContent() {
   const router = useRouter();
   const user = useUser();
   const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [conversations, setConversations] = useState<any[]>([]);
+  const [conversations, setConversations] = useState<Array<{
+    conversation_id: string;
+    agent_id: string;
+    agent_name?: string;
+    created_at: string;
+    status: string;
+    duration: number;
+    start_time_unix_secs: number;
+    call_duration_secs: number;
+    message_count: number;
+    transcript_summary?: string;
+    call_successful?: string;
+    analysis?: {
+      sentiment: string;
+      call_successful: boolean;
+      transcript_summary: string;
+    };
+  }>>([]);
   const [loadingConversations, setLoadingConversations] = useState(false);
   const [hasMore, setHasMore] = useState(false);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [agentToDelete, setAgentToDelete] = useState<any>(null);
+  const [agentToDelete, setAgentToDelete] = useState<{
+    id: string;
+    name: string;
+    createdAt?: string;
+  } | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   
   // Get created agents from user metadata
-  const createdAgents = user?.clientMetadata?.created_agents || [];
+  const createdAgents = useMemo(() => user?.clientMetadata?.created_agents || [], [user?.clientMetadata?.created_agents]);
   
   const handleShareAgent = (agentId: string) => {
     const shareUrl = `${window.location.origin}/agent/${agentId}`;
@@ -67,7 +85,7 @@ function DashboardContent() {
     try {
       // Just remove from user metadata
       if (user) {
-        const updatedAgents = createdAgents.filter((a: any) => a.id !== agentToDelete.id);
+        const updatedAgents = createdAgents.filter((a: { id: string; name: string }) => a.id !== agentToDelete.id);
         await user.update({
           clientMetadata: {
             ...user.clientMetadata,
@@ -89,7 +107,7 @@ function DashboardContent() {
   };
   
   // Fetch conversations
-  const fetchConversations = async (cursor?: string) => {
+  const fetchConversations = useCallback(async (cursor?: string) => {
     setLoadingConversations(true);
     try {
       const params = new URLSearchParams();
@@ -97,7 +115,7 @@ function DashboardContent() {
       params.append("limit", "20");
       
       // Add agent IDs from user metadata - these are the ElevenLabs IDs
-      const agentIds = createdAgents.map((agent: any) => agent.id).join(',');
+      const agentIds = createdAgents.map((agent: { id: string; name: string }) => agent.id).join(',');
       console.log("Fetching conversations for agents:", agentIds);
       
       if (agentIds) {
@@ -143,13 +161,13 @@ function DashboardContent() {
     } finally {
       setLoadingConversations(false);
     }
-  };
+  }, [createdAgents]);
   
   useEffect(() => {
     if (createdAgents.length > 0) {
       fetchConversations();
     }
-  }, [createdAgents.length]);
+  }, [createdAgents.length, fetchConversations]);
   
   // Format duration
   const formatDuration = (seconds: number) => {
@@ -218,7 +236,7 @@ function DashboardContent() {
                         <div className="flex gap-4 pb-4 pl-4" style={{ scrollSnapType: 'x mandatory' }}>
                           {/* Agent cards */}
                           {createdAgents.length > 0 ? (
-                            createdAgents.map((agent: any) => (
+                            createdAgents.map((agent: { id: string; name: string; createdAt?: string }) => (
                               <div
                                 key={agent.id}
                                 className="flex-none w-64 bg-white rounded-lg border border-gray-200 p-4 hover:bg-gray-50 transition-all cursor-pointer shadow-sm"
@@ -317,17 +335,17 @@ function DashboardContent() {
                       <div className="flex justify-center py-8">
                         <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
                       </div>
-                    ) : conversations.filter((conv: any) => 
-                      createdAgents.some((agent: any) => agent.id === conv.agent_id)
+                    ) : conversations.filter((conv) => 
+                      createdAgents.some((agent: { id: string; name: string }) => agent.id === conv.agent_id)
                     ).length > 0 ? (
                       <div className="space-y-3">
                         {conversations
-                          .filter((conv: any) => {
+                          .filter((conv) => {
                             // Only show conversations from agents in user's metadata
-                            return createdAgents.some((agent: any) => agent.id === conv.agent_id);
+                            return createdAgents.some((agent: { id: string; name: string }) => agent.id === conv.agent_id);
                           })
-                          .map((conv: any) => {
-                          const agent = createdAgents.find((a: any) => a.id === conv.agent_id);
+                          .map((conv) => {
+                          const agent = createdAgents.find((a: { id: string; name: string }) => a.id === conv.agent_id);
                           return (
                             <div
                               key={conv.conversation_id}
@@ -415,7 +433,7 @@ function DashboardContent() {
           <AlertDialogHeader>
             <AlertDialogTitle>Remove Agent</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to remove "{agentToDelete?.name}" from your list? The agent will still exist in ElevenLabs.
+              Are you sure you want to remove &quot;{agentToDelete?.name}&quot; from your list? The agent will still exist in ElevenLabs.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

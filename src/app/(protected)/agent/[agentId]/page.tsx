@@ -37,7 +37,7 @@ function AgentConversationContent() {
       console.log("Disconnected from ElevenLabs");
       toast.success("Conversation ended");
     },
-    onError: (error) => {
+    onError: (error: unknown) => {
       console.error("ElevenLabs error:", error);
       console.error("Error details:", {
         message: error instanceof Error ? error.message : 'Unknown error',
@@ -68,7 +68,7 @@ function AgentConversationContent() {
     // Find agent name from user metadata or fetch it
     if (user) {
       const agents = user.clientMetadata?.created_agents || [];
-      const agent = agents.find((a: any) => a.id === agentId);
+      const agent = agents.find((a: { id: string; name: string }) => a.id === agentId);
       if (agent) {
         setAgentName(agent.name);
       } else {
@@ -257,7 +257,7 @@ function AgentConversationContent() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900">End Conversation</h3>
-                      <p className="text-sm text-gray-600">Click the microphone button again to end the conversation when you're done.</p>
+                      <p className="text-sm text-gray-600">Click the microphone button again to end the conversation when you&apos;re done.</p>
                     </div>
                   </div>
                   
